@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Alarm Pagina</title>
+<style>
+  body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, sans-serif;
+    font-size: 2em;
+    color: white;
+    transition: background-color 0.5s ease;
+  }
+
+  /* Groene achtergrond */
+  .groen {
+    background-color: lime;
+    animation: none;
+  }
+
+  /* Rood knipperende achtergrond */
+  .knipper {
+    background-color: red;
+    animation: knipperen 1s infinite;
+  }
+
+  @keyframes knipperen {
+    0%, 50%, 100% { background-color: red; }
+    25%, 75% { background-color: darkred; }
+  }
+</style>
+</head>
+<body class="groen">
+
+<script>
+  const body = document.body;
+
+  // Functie om het alarm te activeren (knipperend rood)
+  function startAlarm() {
+  	wait(1)
+    body.className = 'knipper';
+  }
+
+  // Functie om het alarm te stoppen en groen te maken
+  function stopAlarm() {
+ 	wait(1)
+    body.className = 'groen';
+  }
+
+  // Detectie van pagina zichtbaarheidsveranderingen
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      startAlarm();
+    } else {
+      stopAlarm();
+    }
+  });
+
+  // Detectie van focusverlies en focuswinst
+  window.addEventListener('blur', () => {
+    startAlarm();
+  });
+
+  window.addEventListener('focus', () => {
+    stopAlarm();
+  });
+</script>
+</body>
+</html>
