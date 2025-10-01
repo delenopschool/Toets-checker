@@ -19,7 +19,7 @@
 
   /* Groene achtergrond */
   .groen {
-    background-color: lime;
+    background-color: green;
     animation: none;
   }
 
@@ -40,16 +40,24 @@
 <script>
   const body = document.body;
 
-  // Functie om het alarm te activeren (knipperend rood)
-  function startAlarm() {
-  	wait(1)
-    body.className = 'knipper';
+  function logEvent(eventType) {
+    console.log(`${new Date().toLocaleString()}: ${eventType}`);
   }
 
-  // Functie om het alarm te stoppen en groen te maken
+  // Functie om alarm te activeren (knipperend rood)
+  function startAlarm() {
+    if (!body.classList.contains('knipper')) {
+      body.className = 'knipper';
+      logEvent('ALARM AAN: pagina verlaat of focus verloren');
+    }
+  }
+
+  // Functie om alarm te stoppen en groen te maken
   function stopAlarm() {
- 	wait(1)
-    body.className = 'groen';
+    if (!body.classList.contains('groen')) {
+      body.className = 'groen';
+      logEvent('Alarm UIT: pagina zichtbaar en focus');
+    }
   }
 
   // Detectie van pagina zichtbaarheidsveranderingen
