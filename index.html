@@ -2,81 +2,61 @@
 <html lang="nl">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Alarm Pagina</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Alarm pagina</title>
 <style>
   body {
     margin: 0;
     height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: Arial, sans-serif;
-    font-size: 2em;
-    color: white;
+    background-color: green;
     transition: background-color 0.5s ease;
   }
-
-  /* Groene achtergrond */
-  .groen {
-    background-color: green;
-    animation: none;
-  }
-
-  /* Rood knipperende achtergrond */
-  .knipper {
-    background-color: red;
+  body.knipper {
     animation: knipperen 1s infinite;
   }
-
   @keyframes knipperen {
-    0%, 50%, 100% { background-color: red; }
-    25%, 75% { background-color: darkred; }
+    0% { background-color: red; }
+    50% { background-color: transparent; }
+    100% { background-color: red; }
   }
 </style>
 </head>
-<body class="groen">
+<body>
 
 <script>
   const body = document.body;
 
-  function logEvent(eventType) {
-    console.log(`${new Date().toLocaleString()}: ${eventType}`);
+function startAlarm(triggerType) {
+  body.classList.add('knipper');
+  const now = new Date().toLocaleString();
+  console.log(`ALARM AAN (${triggerType}) op ${now}`);
+}
+
+function stopAlarm() {
+  if (body.classList.contains('knipper')) {
+    body.classList.remove('knipper');
+    const now = new Date().toLocaleString();
+    console.log(`Alarm UIT op ${now}`);
   }
+}
 
-  // Functie om alarm te activeren (knipperend rood)
-  function startAlarm() {
-    if (!body.classList.contains('knipper')) {
-      body.className = 'knipper';
-      logEvent('ALARM AAN: pagina verlaat of focus verloren');
-    }
-  }
-
-  // Functie om alarm te stoppen en groen te maken
-  function stopAlarm() {
-    if (!body.classList.contains('groen')) {
-      body.className = 'groen';
-      logEvent('Alarm UIT: pagina zichtbaar en focus');
-    }
-  }
-
-  // Detectie van pagina zichtbaarheidsveranderingen
-  document.addEventListener('visibilitychange', () => {
-    if (document.hidden) {
-      startAlarm();
-    } else {
-      stopAlarm();
-    }
-  });
-
-  // Detectie van focusverlies en focuswinst
-  window.addEventListener('blur', () => {
-    startAlarm();
-  });
-
-  window.addEventListener('focus', () => {
+// Event voor zichtbaarheid
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) {
+    startAlarm('visibilitychange (vermist zicht)');
+  } else {
     stopAlarm();
-  });
+  }
+});
+
+// Event voor focus
+window.addEventListener('blur', () => {
+  startAlarm('blur');
+});
+window.addEventListener('focus', () => {
+  stopAlarm();
+});
 </script>
+
 </body>
 </html>
